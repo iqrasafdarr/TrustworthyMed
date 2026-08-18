@@ -1,0 +1,11 @@
+data/raw/
+data/splits/*.csv
+results/*.csv
+results/*.json
+figures/*.png
+*.pt
+*.pth
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
