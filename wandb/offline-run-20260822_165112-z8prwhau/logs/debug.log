@@ -1,0 +1,19 @@
+2026-08-22 16:51:12,539 INFO    MainThread:3168 [wandb_setup.py:_flush():81] Current SDK version is 0.28.2
+2026-08-22 16:51:12,539 INFO    MainThread:3168 [wandb_setup.py:_flush():81] Configure stats pid to 3168
+2026-08-22 16:51:12,539 INFO    MainThread:3168 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-08-22 16:51:12,539 INFO    MainThread:3168 [wandb_init.py:setup_run_log_directory():739] Logging user logs to D:\Projects\TrustworthyMed\wandb\offline-run-20260822_165112-z8prwhau\logs\debug.log
+2026-08-22 16:51:12,539 INFO    MainThread:3168 [wandb_init.py:setup_run_log_directory():740] Logging internal logs to D:\Projects\TrustworthyMed\wandb\offline-run-20260822_165112-z8prwhau\logs\debug-internal.log
+2026-08-22 16:51:12,541 INFO    MainThread:3168 [wandb_init.py:init():783] calling init triggers
+2026-08-22 16:51:12,541 INFO    MainThread:3168 [wandb_init.py:init():788] wandb.init called with sweep_config: {}
+config: {'project_name': 'TrustworthyMed', 'experiment_name': 'baseline_resnet50', 'data': {'ham10000_metadata': 'data/raw/ham10000/HAM10000_metadata.csv', 'ham10000_images': 'data/raw/ham10000/images/', 'bcn20000_metadata': 'data/raw/bcn20000/bcn20000_metadata.csv', 'bcn20000_images': 'data/raw/bcn20000/images/', 'splits_file': 'data/splits/ham10000_splits.csv', 'external_test_file': 'data/splits/bcn20000_external_test.csv'}, 'training': {'batch_size': 32, 'num_epochs': 5, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'num_workers': 4, 'device': 'cuda', 'seed': 42}, 'model': {'name': 'resnet50', 'num_classes': 7, 'pretrained': True, 'dropout': 0.5}, 'uncertainty': {'method': 'mc_dropout', 'mc_iterations': 10}, 'logging': {'use_wandb': True, 'wandb_project': 'TrustworthyMed', 'save_dir': 'results/'}, '_wandb': {}}
+2026-08-22 16:51:12,542 INFO    MainThread:3168 [wandb_init.py:init():831] starting backend
+2026-08-22 16:51:15,083 INFO    MainThread:3168 [wandb_init.py:init():846] sending inform_init request
+2026-08-22 16:51:15,320 INFO    MainThread:3168 [wandb_init.py:init():851] backend started and connected
+2026-08-22 16:51:15,322 INFO    MainThread:3168 [wandb_init.py:init():921] updated telemetry
+2026-08-22 16:51:15,655 INFO    MainThread:3168 [wandb_init.py:init():944] communicating run to backend with 90.0 second timeout
+2026-08-22 16:51:15,665 INFO    MainThread:3168 [wandb_init.py:init():981] starting run threads in backend
+2026-08-22 16:51:15,957 INFO    MainThread:3168 [wandb_run.py:_console_start():2626] atexit reg
+2026-08-22 16:51:15,957 INFO    MainThread:3168 [wandb_run.py:_redirect():2476] redirect: wrap_raw
+2026-08-22 16:51:15,957 INFO    MainThread:3168 [wandb_run.py:_redirect():2545] Wrapping output streams.
+2026-08-22 16:51:15,957 INFO    MainThread:3168 [wandb_run.py:_redirect():2568] Redirects installed.
+2026-08-22 16:51:15,964 INFO    MainThread:3168 [wandb_init.py:init():1019] run started, returning control to user process
