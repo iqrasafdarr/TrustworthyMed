@@ -1,107 +1,34 @@
-project: TrustworthyMed
-seed: 42
+project_name: "TrustworthyMed"
+experiment_name: "baseline_resnet50"
 
-paths:
-  ham10000_metadata: data/raw/ham10000/HAM10000_metadata.csv
-  ham10000_images: data/raw/ham10000/images/
-  bcn20000_metadata: data/raw/bcn20000/bcn20000_metadata.csv
-  bcn20000_images: data/raw/bcn20000/images/
-  splits_out: data/splits/
-  results_out: results/
-  figures_out: figures/
-
-classes:
-  # 7 classes shared between HAM10000 and BCN20000
-  # BCN20000's 8th class (scc) is excluded - not present in HAM10000
-  shared:
-    - akiec
-    - bcc
-    - bkl
-    - df
-    - mel
-    - nv
-    - vasc
-
-split:
-  strategy: group_shuffle_split      # groups by lesion_id, never image_id
-  group_col: lesion_id
-  stratify_col: dx
-  train_ratio: 0.70
-  val_ratio: 0.15
-  test_ratio: 0.15
-  random_state: 42
-  dedup_phash_check: true
-  phash_hamming_threshold: 2         # flag pairs within this distance as near-duplicates
-
-preprocessing:
-  image_size: 224
-  # IMPORTANT: normalization is architecture-specific.
-  # This is the exact bug that broke EfficientNetB0 in the brain-MRI project -
-  # every model config below MUST specify its own correct preprocessing.
-  normalization:
-    resnet50:
-      mean: [0.485, 0.456, 0.406]
-      std: [0.229, 0.224, 0.225]
-      preprocess_fn: torchvision.models.ResNet50_Weights.IMAGENET1K_V2.transforms
-    mobilenet_v2:
-      mean: [0.485, 0.456, 0.406]
-      std: [0.229, 0.224, 0.225]
-      preprocess_fn: torchvision.models.MobileNet_V2_Weights.IMAGENET1K_V2.transforms
-    efficientnet_b0:
-      mean: [0.485, 0.456, 0.406]
-      std: [0.229, 0.224, 0.225]
-      preprocess_fn: torchvision.models.EfficientNet_B0_Weights.IMAGENET1K_V1.transforms
-      note: >
-        torchvision's EfficientNet-B0 IMAGENET1K_V1 weights expect standard
-        ImageNet mean/std at 224x224 (NOT the 0.5/0.5/0.5 Inception-style
-        normalization used by some TF/timm EfficientNet variants). Confirm
-        weights source before training - mixing a TF-style checkpoint with
-        torchvision-style normalization reproduces last time's failure mode.
-
-augmentation:
-  train_only: true
-  horizontal_flip: 0.5
-  vertical_flip: 0.5
-  rotation_degrees: 15
-  color_jitter:
-    brightness: 0.1
-    contrast: 0.1
-    saturation: 0.1
-  note: >
-    Deliberately excludes noise/blur/contrast transforms - those are reserved
-    for the robustness experiment and must not appear in training augmentation,
-    or the robustness results would be contaminated by train-time exposure.
-
-models:
-  - name: mobilenet_v2
-    pretrained: imagenet
-    dropout_p: 0.3
-  - name: efficientnet_b0
-    pretrained: imagenet
-    dropout_p: 0.3
-  - name: resnet50
-    pretrained: imagenet
-    dropout_p: 0.3          # dropout added before final FC for MC-Dropout validity
+data:
+  ham10000_metadata: "data/raw/ham10000/HAM10000_metadata.csv"
+  ham10000_images: "data/raw/ham10000/images/"
+  bcn20000_metadata: "data/raw/bcn20000/bcn20000_metadata.csv"
+  bcn20000_images: "data/raw/bcn20000/images/"
+  splits_file: "data/splits/ham10000_splits.csv"
+  external_test_file: "data/splits/bcn20000_external_test.csv"
 
 training:
-  batch_size: 32
-  epochs: 20
-  optimizer: adamw
-  learning_rate: 3.0e-4
-  weight_decay: 1.0e-4
-  scheduler: cosine
-  early_stopping_patience: 5
-  mixed_precision: true
+  batch_size: 16
+  num_epochs: 20
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  num_workers: 0
+  device: "cpu"
+  seed: 42
+
+model:
+  name: "resnet50"
+  num_classes: 7
+  pretrained: true
+  dropout: 0.5
 
 uncertainty:
-  method: mc_dropout
-  n_forward_passes: 30
+  method: "mc_dropout"
+  mc_iterations: 10
 
-robustness:
-  corruptions: [gaussian_noise, blur]
-  severities: [1, 2, 3]
-  applied_at: inference_only
-
-xai:
-  methods: [grad_cam, integrated_gradients]
-  sample_categories: [correct, incorrect, high_confidence_error, low_confidence_correct, per_class]
+logging:
+  use_wandb: false
+  wandb_project: "TrustworthyMed"
+  save_dir: "results/"
