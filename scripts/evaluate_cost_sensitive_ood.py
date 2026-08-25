@@ -15,7 +15,6 @@ def main(checkpoint_path):
     
     device = torch.device('cpu')
     
-    # Load test data
     try:
         splits = pd.read_csv('data/splits/ham10000_hospital_splits.csv')
         test_df = splits[splits['split'] == 'test']
@@ -29,7 +28,6 @@ def main(checkpoint_path):
     img_dir = config['data']['ham10000_images']
     transform = get_transforms('val')
     
-    # Load model
     model = build_model(config)
     ckpt = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(ckpt['model_state_dict'])
@@ -40,7 +38,6 @@ def main(checkpoint_path):
     print("COST-SENSITIVE REJECTION + OOD DETECTION")
     print("="*70)
     
-    # Collect predictions
     all_probs, all_preds, all_labels = [], [], []
     with torch.no_grad():
         for idx, row in test_df.iterrows():
@@ -68,7 +65,7 @@ def main(checkpoint_path):
     labels = np.array(all_labels)
     confidences = probs.max(axis=1)
     
-    # 1. COST-SENSITIVE REJECTION
+    # COST-SENSITIVE REJECTION
     print("\n[1/2] Cost-Sensitive Rejection...")
     csr = CostSensitiveRejection()
     csr_results = csr.evaluate(preds, confidences, labels, base_threshold=0.75)
@@ -83,10 +80,9 @@ def main(checkpoint_path):
     print(f"  Melanoma accuracy: {csr_results['melanoma']['cost_sensitive_accuracy']*100:.1f}%")
     print(f"  (vs {csr_results['melanoma']['uniform_accuracy']*100:.1f}% uniform)")
     
-    # 2. OOD DETECTION (simulate OOD with random noise)
+    # OOD DETECTION
     print("\n[2/2] OOD Detection...")
     
-    # In-distribution energies
     id_logits_list = []
     with torch.no_grad():
         for idx, row in test_df.head(100).iterrows():
@@ -104,15 +100,11 @@ def main(checkpoint_path):
     
     id_logits = torch.cat(id_logits_list)
     
-    # OOD: random noise images
     ood_images = torch.randn(50, 3, 224, 224).to(device)
     with torch.no_grad():
         ood_logits = model(ood_images)
     
     ood = OODDetector(temperature=1.0, percentile=95)
-    ood.fit(None, model, device)  # We'll set threshold manually from id_logits
-    
-    # Manual fit using id_logits
     id_energies = ood.energy_score(id_logits).cpu().numpy()
     ood.threshold = float(np.percentile(id_energies, 95))
     
@@ -125,7 +117,6 @@ def main(checkpoint_path):
     print(f"  ID mean energy: {ood_results['id_mean_energy']:.2f}")
     print(f"  OOD mean energy: {ood_results['ood_mean_energy']:.2f}")
     
-    # Save
     save_dir = os.path.dirname(checkpoint_path)
     results = {
         'cost_sensitive_rejection': csr_results,

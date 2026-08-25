@@ -29,20 +29,12 @@ class CostSensitiveRejection:
         return confidence >= threshold, threshold
     
     def evaluate(self, predictions, confidences, labels, base_threshold=0.75):
-        """
-        Evaluate cost-sensitive rejection vs uniform rejection.
-        predictions: [N] predicted class indices
-        confidences: [N] max softmax probabilities
-        labels: [N] true class indices
-        """
         n = len(predictions)
         
-        # Uniform rejection (same threshold for all)
         uniform_accepted = confidences >= base_threshold
         uniform_acc = (predictions[uniform_accepted] == labels[uniform_accepted]).mean() if uniform_accepted.sum() > 0 else 0
         uniform_coverage = uniform_accepted.mean()
         
-        # Cost-sensitive rejection
         cs_accepted = np.zeros(n, dtype=bool)
         thresholds_used = []
         for i in range(n):
@@ -53,8 +45,7 @@ class CostSensitiveRejection:
         cs_acc = (predictions[cs_accepted] == labels[cs_accepted]).mean() if cs_accepted.sum() > 0 else 0
         cs_coverage = cs_accepted.mean()
         
-        # Melanoma-specific metrics
-        mel_mask = labels == 4  # melanoma index
+        mel_mask = labels == 4
         mel_uniform_acc = (predictions[mel_mask & uniform_accepted] == labels[mel_mask & uniform_accepted]).mean() if (mel_mask & uniform_accepted).sum() > 0 else 0
         mel_cs_acc = (predictions[mel_mask & cs_accepted] == labels[mel_mask & cs_accepted]).mean() if (mel_mask & cs_accepted).sum() > 0 else 0
         
