@@ -1,0 +1,24 @@
+{
+  "cost_sensitive_rejection": {
+    "uniform": {
+      "accuracy": 0.929471032745592,
+      "coverage": 0.9043280182232346
+    },
+    "cost_sensitive": {
+      "accuracy": 0.9296875,
+      "coverage": 0.8747152619589977
+    },
+    "melanoma": {
+      "uniform_accuracy": 0.42857142857142855,
+      "cost_sensitive_accuracy": 0.25806451612903225,
+      "n_cases": 67
+    }
+  },
+  "ood_detection": {
+    "id_false_positive_rate": 0.05,
+    "ood_true_positive_rate": 1.0,
+    "id_mean_energy": -4.1392011642456055,
+    "ood_mean_energy": -2.2458128929138184
+  },
+  "ood_threshold": -2.577059507369995
+}

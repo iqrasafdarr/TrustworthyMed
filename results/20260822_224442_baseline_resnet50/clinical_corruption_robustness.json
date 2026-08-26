@@ -1,0 +1,51 @@
+{
+  "baseline": 0.8815489749430524,
+  "hair_occlusion_sev1": {
+    "accuracy": 0.8678815489749431,
+    "drop": 0.013667425968109326
+  },
+  "hair_occlusion_sev3": {
+    "accuracy": 0.8223234624145785,
+    "drop": 0.059225512528473856
+  },
+  "hair_occlusion_sev5": {
+    "accuracy": 0.7972665148063781,
+    "drop": 0.08428246013667429
+  },
+  "ruler_overlay_sev1": {
+    "accuracy": 0.8701594533029613,
+    "drop": 0.011389521640091105
+  },
+  "ruler_overlay_sev3": {
+    "accuracy": 0.8724373576309795,
+    "drop": 0.009111617312072884
+  },
+  "ruler_overlay_sev5": {
+    "accuracy": 0.8701594533029613,
+    "drop": 0.011389521640091105
+  },
+  "color_temperature_sev1": {
+    "accuracy": 0.8861047835990888,
+    "drop": -0.004555808656036442
+  },
+  "color_temperature_sev3": {
+    "accuracy": 0.8952164009111617,
+    "drop": -0.013667425968109326
+  },
+  "color_temperature_sev5": {
+    "accuracy": 0.89749430523918,
+    "drop": -0.015945330296127547
+  },
+  "jpeg_artifact_sev1": {
+    "accuracy": 0.8815489749430524,
+    "drop": 0.0
+  },
+  "jpeg_artifact_sev3": {
+    "accuracy": 0.8906605922551253,
+    "drop": -0.009111617312072884
+  },
+  "jpeg_artifact_sev5": {
+    "accuracy": 0.8952164009111617,
+    "drop": -0.013667425968109326
+  }
+}
