@@ -1,0 +1,6 @@
+near_ood_n: 200
+near_ood_auroc: 0.278
+learned_trust_auroc: 0.465
+pleu_auroc: 0.523
+ecs_auroc: 0.531
+conf_auroc: 0.507

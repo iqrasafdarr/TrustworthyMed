@@ -1,0 +1,17 @@
+n_total: 150
+n_calibration: 75
+n_heldout: 75
+
+--- ECS ---
+recalibrated_tau: 0.985
+heldout_catch_rate: 0.933
+heldout_false_alarm_rate: 0.889
+heldout_auroc: 0.472
+heldout_auroc_ci: [0.345, 0.608]
+
+--- PLEU ---
+recalibrated_rho: 0.254
+heldout_catch_rate: 0.167
+heldout_false_alarm_rate: 0.244
+heldout_auroc: 0.479
+heldout_auroc_ci: [0.345, 0.609]
