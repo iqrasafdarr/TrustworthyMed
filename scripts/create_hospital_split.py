@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 import os
 
 df = pd.read_csv('data/raw/ham10000/HAM10000_metadata.csv')
+df['lesion_id'] = df['lesion_id'].astype(str)
+df['image_id'] = df['image_id'].astype(str)
 
 print("Dataset values:")
 print(df['dataset'].value_counts())
@@ -18,8 +20,8 @@ print(f"Test images: {len(test_df)}")
 
 # Split train by lesion_id (prevent leakage)
 train_lesions, val_lesions = train_test_split(
-    train_df['lesion_id'].unique(), 
-    test_size=0.15, 
+    train_df['lesion_id'].unique().tolist(),
+    test_size=0.15,
     random_state=42
 )
 
